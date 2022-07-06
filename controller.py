@@ -22,7 +22,6 @@ from websockets import serve
 import vgamepad as vg
 import json
 import os
-import ssl
 
 port = os.environ.get('PORT', '8000')
 gamepad = vg.VX360Gamepad()
@@ -122,12 +121,6 @@ async def handler(websocket):
                 gamepad.release_button(
                     button=vg.XUSB_BUTTON.XUSB_GAMEPAD_GUIDE)
             gamepad.update()
-
-ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-ssl_context.verify_mode = ssl.CERT_NONE
-# load certificate
-ssl_context.load_cert_chain(
-    'cert.pem', 'key.pem')
 
 
 async def main():

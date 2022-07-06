@@ -1,22 +1,3 @@
-# import vgamepad as vg
-
-# gamepad = vg.VX360Gamepad()
-
-# while True:
-#     # press the A button
-#     gamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
-#     # press the left hat button
-#     gamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_LEFT)
-
-#     gamepad.update()  # send the updated state to the computer
-
-#     # (...) A and left hat are pressed...
-
-#     # release the A button
-#     gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
-
-#     gamepad.update()
-
 import asyncio
 from websockets import serve
 import vgamepad as vg
@@ -30,12 +11,8 @@ gamepad = vg.VX360Gamepad()
 
 async def handler(websocket):
     async for message in websocket:
-        # check if message is json
         if message.startswith('{'):
-            # parse json
             message = json.loads(message)
-            # {"0":false,"1":false,"2":false,"3":false,"4":false,"5":false,"6":false,"7":false,"8":false,"9":false,"10":false,"11":false,"12":false,"13":false,"14":false,"15":false,"16":false}
-            # get "0"
             gamepad.left_joystick(
                 int(message['lx']*32767), -int(message['ly']*32767))
             gamepad.right_joystick(
@@ -125,14 +102,11 @@ async def handler(websocket):
 
 
 async def main():
-    # print my IP address
     print(socket.gethostbyname(socket.gethostname()))
-    # write my IP address to a file
     with open('ip.js', 'w') as f:
         f.write("let ip=\"" + socket.gethostbyname(socket.gethostname())+"\";")
     print("Connecting to: " + '0.0.0.0' + ":" + str(port))
     async with serve(handler, '0.0.0.0', port):
-        # print server ip address and port
-        await asyncio.Future()  # run forever
+        await asyncio.Future()
 
 asyncio.run(main())

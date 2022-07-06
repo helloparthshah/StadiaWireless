@@ -22,8 +22,9 @@ from websockets import serve
 import vgamepad as vg
 import json
 import os
+import socket
 
-port = os.environ.get('PORT', '8000')
+port = os.environ.get('PORT', '80')
 gamepad = vg.VX360Gamepad()
 
 
@@ -124,6 +125,8 @@ async def handler(websocket):
 
 
 async def main():
+    # print my IP address
+    print(socket.gethostbyname(socket.gethostname()))
     print("Connecting to: " + '0.0.0.0' + ":" + str(port))
     async with serve(handler, '0.0.0.0', port):
         # print server ip address and port

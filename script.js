@@ -36,8 +36,8 @@ let buttons = {
     "ry": 0,
 }
 
-// enable cors
-let socket = new WebSocket("ws://parth-laptop:8000");
+
+let socket = new WebSocket("ws://parth-laptop");
 let connected = false;
 socket.onopen = function (e) {
     connected = true;

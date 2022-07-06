@@ -1,12 +1,13 @@
 var noSleep = new NoSleep();
 
-document.addEventListener('click', function enableNoSleep() {
-    document.removeEventListener('click', enableNoSleep, false);
+/* document.addEventListener('touchstart', function enableNoSleep() {
+    document.removeEventListener('touchstart', enableNoSleep, false);
     noSleep.enable();
 }, false);
-
+ */
 let gamepadIndex;
 window.addEventListener('gamepadconnected', (event) => {
+    noSleep.enable();
     gamepadIndex = event.gamepad.index;
 });
 
@@ -63,6 +64,7 @@ socket.onerror = function (error) {
     console.log(`[error] ${error.message}`);
 };
 
+
 setInterval(() => {
     if (gamepadIndex !== undefined) {
         // a gamepad is connected and has an index
@@ -84,7 +86,7 @@ setInterval(() => {
             } else {
                 buttons[buttonIndex] = false;
             }
-            socket.send(JSON.stringify(buttons));
         })
+        socket.send(JSON.stringify(buttons));
     }
 }, 1)

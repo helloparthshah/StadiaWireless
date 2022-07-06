@@ -1,13 +1,9 @@
 var noSleep = new NoSleep();
 
-function enableNoSleep() {
+document.addEventListener('click', function enableNoSleep() {
+    document.removeEventListener('click', enableNoSleep, false);
     noSleep.enable();
-    document.removeEventListener('touchstart', enableNoSleep, false);
-}
-
-// Enable wake lock.
-// (must be wrapped in a user input event handler e.g. a mouse or touch handler)
-document.addEventListener('touchstart', enableNoSleep, false);
+}, false);
 
 let gamepadIndex;
 window.addEventListener('gamepadconnected', (event) => {
@@ -66,7 +62,7 @@ socket.onclose = function (event) {
 };
 
 socket.onerror = function (error) {
-    alert(`[error] ${error.message}`);
+    console.log(`[error] ${error.message}`);
 };
 
 setInterval(() => {

@@ -127,6 +127,9 @@ async def handler(websocket):
 async def main():
     # print my IP address
     print(socket.gethostbyname(socket.gethostname()))
+    # write my IP address to a file
+    with open('ip.js', 'w') as f:
+        f.write("let ip=\"" + socket.gethostbyname(socket.gethostname())+"\";")
     print("Connecting to: " + '0.0.0.0' + ":" + str(port))
     async with serve(handler, '0.0.0.0', port):
         # print server ip address and port

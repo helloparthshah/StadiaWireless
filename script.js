@@ -37,13 +37,11 @@ let buttons = {
 }
 
 
-let socket = new WebSocket("ws://parth-laptop");
 let connected = false;
+let socket = new WebSocket("ws://" + ip);
 socket.onopen = function (e) {
     connected = true;
     console.log("[open] Connection established");
-    console.log("Sending to server");
-    socket.send("My name is John");
 };
 
 socket.onmessage = function (event) {

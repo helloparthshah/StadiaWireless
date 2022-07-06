@@ -11,7 +11,6 @@ gamepad = vg.VX360Gamepad()
 
 async def handler(websocket):
     async for message in websocket:
-        print(message)
         if message.startswith('{'):
             message = json.loads(message)
             gamepad.left_joystick(

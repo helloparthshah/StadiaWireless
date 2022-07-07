@@ -1,10 +1,10 @@
 var noSleep = new NoSleep();
 
-/* document.addEventListener('touchstart', function enableNoSleep() {
-    document.removeEventListener('touchstart', enableNoSleep, false);
+document.addEventListener('click', function enableNoSleep() {
+    document.removeEventListener('click', enableNoSleep, false);
     noSleep.enable();
 }, false);
- */
+
 let gamepadIndex;
 window.addEventListener('gamepadconnected', (event) => {
     noSleep.enable();
@@ -39,14 +39,35 @@ let buttons = {
 
 
 let connected = false;
-let socket = new WebSocket("ws://" + ip);
+let socket = new WebSocket("ws://" + ip + '/controller');
 socket.onopen = function (e) {
     connected = true;
     console.log("[open] Connection established");
 };
 
+let vibrate = async (data) => {
+    if (navigator.getGamepads()[gamepadIndex].vibrationActuator)
+        await navigator.getGamepads()[gamepadIndex].vibrationActuator.playEffect('dual-rumble', {
+            startDelay: 0,
+            duration: 500,
+            weakMagnitude: data.sm / 255,
+            strongMagnitude: data.lm / 255
+        });
+}
+
 socket.onmessage = function (event) {
     console.log(`[message] Data received from server: ${event.data}`);
+    let data = JSON.parse(event.data);
+    console.log(data.lm);
+    console.log(data.sm);
+    // vibrate controller
+    if (gamepadIndex !== undefined) {
+        vibrate(data).then(() => {
+            if (data.lm > 0 || data.sm > 0) {
+                vibrate(data);
+            }
+        });
+    }
 };
 
 socket.onclose = function (event) {

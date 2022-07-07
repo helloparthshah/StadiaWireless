@@ -1,14 +1,21 @@
-import asyncio
-from websockets import serve
+from flask import Flask, render_template, request
+from flask_sock import Sock
+import socket
+import os
 import vgamepad as vg
 import json
-import os
-import socket
 from pystray import Icon as icon, Menu as menu, MenuItem as item
 from PIL import Image
 
 port = os.environ.get('PORT', '80')
-gamepad = vg.VX360Gamepad()
+
+app = Flask(__name__, static_url_path='',
+            static_folder='static',
+            template_folder='templates')
+sock = Sock(app)
+gamepad = None
+
+notif = None
 
 
 def create_image():
@@ -19,8 +26,25 @@ def create_image():
     return image
 
 
-async def handler(websocket):
-    async for message in websocket:
+@sock.route('/controller')
+def controller(ws):
+    def my_callback(client, target, large_motor, small_motor, led_number, user_data):
+        notif = {
+            'lm': large_motor,
+            'sm': small_motor,
+            'led': led_number
+        }
+        ws.send(json.dumps(notif))
+    global gamepad
+    if gamepad == None:
+        gamepad = vg.VX360Gamepad()
+    gamepad.register_notification(callback_function=my_callback)
+    while True:
+        if not ws.connected:
+            gamepad.close()
+            gamepad = None
+            break
+        message = ws.receive()
         if message.startswith('{'):
             message = json.loads(message)
             gamepad.left_joystick(
@@ -111,26 +135,32 @@ async def handler(websocket):
             gamepad.update()
 
 
-async def main():
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+# run the app
+def runServer():
     print(socket.gethostbyname(socket.gethostname()))
-    with open('ip.js', 'w') as f:
+    with open('static/ip.js', 'w') as f:
         f.write("let ip=\"" + socket.gethostbyname(socket.gethostname())+"\";")
-    print("Connecting to: " + '0.0.0.0' + ":" + str(port))
-    async with serve(handler, '0.0.0.0', port):
-        while icon.visible == True:
-            await asyncio.sleep(1)
-        # await asyncio.Future()
+    app.run(host='0.0.0.0', port=port)
 
 
 def exit(icon, item):
     icon.visible = False
     icon.stop()
+    shutdown_func = request.environ.get('werkzeug.server.shutdown')
+    if shutdown_func is None:
+        raise RuntimeError('Not running werkzeug')
+    shutdown_func()
 
 
 def setup(icon):
     # set visible to true to show the icon
     icon.visible = True
-    asyncio.run(main())
+    runServer()
 
 
 icon('test', create_image(), menu=menu(

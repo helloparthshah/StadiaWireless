@@ -1,2 +1,4 @@
+Pillow==9.2.0
+pystray==0.19.4
 vgamepad==0.0.8
 websockets==10.3

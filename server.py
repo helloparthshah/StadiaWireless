@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request
 from flask_sock import Sock
 import socket
-import os
 import vgamepad as vg
 import json
 from pystray import Icon as icon, Menu as menu, MenuItem as item
 from PIL import Image
-
-port = os.environ.get('PORT', '80')
+import threading
+import ctypes
+import datetime
 
 app = Flask(__name__, static_url_path='',
             static_folder='static',
@@ -32,7 +32,7 @@ def controller(ws):
         notif = {
             'lm': large_motor,
             'sm': small_motor,
-            'led': led_number
+            'led': led_number,
         }
         ws.send(json.dumps(notif))
     global gamepad
@@ -140,31 +140,75 @@ def index():
     return render_template('index.html')
 
 
-# run the app
+hostname = socket.gethostname()
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.bind(('0.0.0.0', 0))
+port = sock.getsockname()[1]
+sock.close()
+
+
 def runServer():
-    print(socket.gethostbyname(socket.gethostname()))
-    with open('static/ip.js', 'w') as f:
-        f.write("let ip=\"" + socket.gethostbyname(socket.gethostname())+"\";")
+    print("Open this webpage in your mobile: http://"+hostname+':'+str(port))
     app.run(host='0.0.0.0', port=port)
 
 
-def exit(icon, item):
+class thread_with_exception(threading.Thread):
+    def __init__(self, name):
+        threading.Thread.__init__(self)
+        self.name = name
+
+    def run(self):
+
+        # target function of the thread class
+        try:
+            runServer()
+        finally:
+            print('ended')
+
+    def get_id(self):
+
+        # returns id of the respective thread
+        if hasattr(self, '_thread_id'):
+            return self._thread_id
+        for id, thread in threading._active.items():
+            if thread is self:
+                return id
+
+    def raise_exception(self):
+        thread_id = self.get_id()
+        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id,
+                                                         ctypes.py_object(SystemExit))
+        if res > 1:
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
+            print('Exception raise failure')
+
+
+t = thread_with_exception('thread_with_exception')
+t.start()
+
+
+def exit(icon):
+    global t
+    t.raise_exception()
+    t.join()
     icon.visible = False
     icon.stop()
-    shutdown_func = request.environ.get('werkzeug.server.shutdown')
-    if shutdown_func is None:
-        raise RuntimeError('Not running werkzeug')
-    shutdown_func()
 
 
-def setup(icon):
-    # set visible to true to show the icon
-    icon.visible = True
-    runServer()
+def startIcon():
+    import webbrowser
+    icon('test', Image.open('logo.ico'), menu=menu(
+        item(
+            'http://'+hostname+':'+str(port),
+            action=lambda: webbrowser.open('http://'+hostname+':'+str(port))
+        ),
+        item('http://'+socket.gethostbyname(socket.gethostname())+':'+str(port),
+             action=lambda: webbrowser.open('http://'+socket.gethostbyname(socket.gethostname())+':'+str(port))),
+        item(
+            'Exit',
+            action=exit
+        )
+    )).run()
 
 
-icon('test', create_image(), menu=menu(
-    item(
-        'Exit',
-        action=exit
-    ))).run_detached(setup=setup)
+startIcon()

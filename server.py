@@ -7,6 +7,7 @@ from pystray import Icon as icon, Menu as menu, MenuItem as item
 from PIL import Image
 import threading
 import ctypes
+import datetime
 
 app = Flask(__name__, static_url_path='',
             static_folder='static',
@@ -31,7 +32,8 @@ def controller(ws):
         notif = {
             'lm': large_motor,
             'sm': small_motor,
-            'led': led_number
+            'led': led_number,
+            'time': str(datetime.datetime.now())
         }
         ws.send(json.dumps(notif))
     global gamepad
@@ -201,6 +203,8 @@ def startIcon():
             'http://'+hostname+':'+str(port),
             action=lambda: webbrowser.open('http://'+hostname+':'+str(port))
         ),
+        item('http://'+socket.gethostbyname(socket.gethostname())+':'+str(port),
+             action=lambda: webbrowser.open('http://'+socket.gethostbyname(socket.gethostname())+':'+str(port))),
         item(
             'Exit',
             action=exit

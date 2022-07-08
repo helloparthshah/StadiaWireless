@@ -61,6 +61,11 @@ socket.onmessage = function (event) {
     let data = JSON.parse(event.data);
     console.log(data.lm);
     console.log(data.sm);
+    // calculate the time difference between data.time and the current time
+    let timeDiff = Date.now() - Date.parse(data.time);
+    // convert the time difference to milliseconds
+    timeDiff = timeDiff / 1000;
+    console.log(timeDiff);
     // vibrate controller
     if (gamepadIndex !== undefined) {
         vibrate(data).then(() => {

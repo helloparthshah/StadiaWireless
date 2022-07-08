@@ -1,4 +1,6 @@
-Pillow==9.2.0
+flask_sock==0.5.2
 pystray==0.19.4
-vgamepad==0.0.8
+pytest==7.1.2
+traitlets==5.3.0
 websockets==10.3
+vgamepad==0.0.8

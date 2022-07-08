@@ -4,7 +4,7 @@ Stadia Wireless enables you to use your stadia controller wirelessly. Not just w
 
 ## How to use Stadia Wireless
 
-[Watch the demo](https://i.ibb.co/92cLBXc/download.gif)]
+[Watch the demo](https://i.ibb.co/92cLBXc/download.gif)
 [Demo](https://www.youtube.com/watch?v=tBFfNh7ldqo&ab_channel=ParthShah)
 
 First, you need to install python3 if you don't already have it.

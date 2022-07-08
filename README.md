@@ -10,7 +10,7 @@ Stadia Wireless enables you to use your stadia controller wirelessly. Not just w
 First, you need to install python3 if you don't already have it.
 [Python Install Guide](https://realpython.com/installing-python/)
 
-Download the latest release from the [releases](https://github.com/helloparthshah/StadiaWireless/releases/tag/1.0.1)
+Download the latest release from the [releases](https://github.com/helloparthshah/StadiaWireless/releases/)
 
 You have 2 options, you can directly run the server by downloading the pre installed zip file and running server.exe or you can install StadiaWireless by using the Stadia.Wireless.msi installer.
 

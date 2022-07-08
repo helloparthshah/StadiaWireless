@@ -4,38 +4,13 @@ Stadia Wireless enables you to use your stadia controller wirelessly. Not just w
 
 ## How to use Stadia Wireless
 
-First you need to clone the repository.
+First, you need to install python3 if you don't already have it.
+[Python Install Guide](https://realpython.com/installing-python/)
 
-Next you need to install the dependencies.
+Download the latest release from the [releases](https://github.com/helloparthshah/StadiaWireless/releases/tag/1.0.1)
 
-```bash
-pip install -r requirements.txt
-```
-Then first, run the server.
+You have 2 options, you can directly run the server by downloading the pre installed zip file and running server.exe or you can install StadiaWireless by using the Stadia.Wireless.msi installer.
 
-```bash
-python controller.py
-```
+You'll see a icon in the System Tray and right clicking on it will show you the website you'll need to access.
 
-Then you can serve the static files.
-
-I found out browser-sync to work well but you can use any other tool.
-
-```bash
-npx browser-sync start --server
-```
-
-Access the webite using the external ip address provided by browser-sync on your phone.
-
-Should look like this:
-```
-[Browsersync] Access URLs:
-       Local: http://localhost:3000
-    External: http://10.4.51.240:3000
- ------------------------------------
-          UI: http://localhost:3001
- UI External: http://localhost:3001
- ------------------------------------
- ```
-
- Lastly, connect your controller to your phone and enjoy!
+Open the webpage on your phone, connect your controller and enjoy!

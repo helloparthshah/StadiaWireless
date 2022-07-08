@@ -103,6 +103,7 @@ section {
 	min-height: 100vh;
 	min-height: calc(100vh - 4em);
 	padding: 5vw;
+	padding: 5vmin;
 	max-width: 800px;
 }
 section.visible {
@@ -244,6 +245,15 @@ header a.button > button > span {
 }
 
 /* Controller */
+
+#Controller {
+	width: auto;
+	height: auto;
+	max-width: 88vw;
+	max-width: calc(96vw - 10vmin);
+	max-height: 70vh;
+	max-height: calc(90vh - 4em - 10vmin);
+}
 
 #Controller .transparent {
 	opacity: 0.1;

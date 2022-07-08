@@ -122,6 +122,13 @@ footer {
 	color: rgba(255, 255, 255, 0.6);
 }
 
+footer .iconLink {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0.4em 1em;
+}
+
 /* Buttons */
 
 button {

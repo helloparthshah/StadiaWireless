@@ -61,11 +61,6 @@ socket.onmessage = function (event) {
     let data = JSON.parse(event.data);
     console.log(data.lm);
     console.log(data.sm);
-    // calculate the time difference between data.time and the current time
-    let timeDiff = Date.now() - Date.parse(data.time);
-    // convert the time difference to milliseconds
-    timeDiff = timeDiff / 1000;
-    console.log(timeDiff);
     // vibrate controller
     if (gamepadIndex !== undefined) {
         vibrate(data).then(() => {
@@ -81,8 +76,6 @@ socket.onclose = function (event) {
     if (event.wasClean) {
         console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
     } else {
-        // e.g. server process killed or network down
-        // event.code is usually 1006 in this case
         console.log('[close] Connection died');
     }
 };
@@ -91,8 +84,7 @@ socket.onerror = function (error) {
     console.log(`[error] ${error.message}`);
 };
 
-
-setInterval(() => {
+const update = () => {
     if (gamepadIndex !== undefined) {
         // a gamepad is connected and has an index
         const myGamepad = navigator.getGamepads()[gamepadIndex];
@@ -116,4 +108,13 @@ setInterval(() => {
         })
         socket.send(JSON.stringify(buttons));
     }
-}, 1)
+}
+// setInterval(() => {
+//     update();
+// }, 1)
+
+const loop = () => {
+    update();
+    requestAnimationFrame(loop);
+}
+loop();

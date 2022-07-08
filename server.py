@@ -33,7 +33,6 @@ def controller(ws):
             'lm': large_motor,
             'sm': small_motor,
             'led': led_number,
-            'time': str(datetime.datetime.now())
         }
         ws.send(json.dumps(notif))
     global gamepad

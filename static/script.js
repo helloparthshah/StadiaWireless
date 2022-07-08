@@ -39,7 +39,8 @@ let buttons = {
 
 
 let connected = false;
-let socket = new WebSocket("ws://" + ip + '/controller');
+let url = window.location.href.replace("http", "ws");
+let socket = new WebSocket(url + '/controller');
 socket.onopen = function (e) {
     connected = true;
     console.log("[open] Connection established");

@@ -338,6 +338,11 @@ header a.button>button>span {
     fill: #c8c8c8;
 }
 
+#Controller .stick-inner.active {
+    fill: #d1293d;
+    opacity: 0.5;
+}
+
 #Controller .stick-inner {
     fill: #f9f9f9;
 }

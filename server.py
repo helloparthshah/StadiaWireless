@@ -13,9 +13,7 @@ app = Flask(__name__, static_url_path='',
             static_folder='static',
             template_folder='templates')
 sock = Sock(app)
-gamepad = None
-
-notif = None
+# gamepad = None
 
 
 def create_image():
@@ -35,17 +33,21 @@ def controller(ws):
             'led': led_number,
         }
         ws.send(json.dumps(notif))
-    global gamepad
+    # global gamepad
+    gamepad = None
     if gamepad == None:
         gamepad = vg.VX360Gamepad()
     gamepad.register_notification(callback_function=my_callback)
     while True:
         if not ws.connected:
-            gamepad.close()
+            print("Disconnected")
+            gamepad.unregister_notification()
+            del gamepad
             gamepad = None
-            break
-        message = ws.receive()
-        if message.startswith('{'):
+            ws.close()
+            return
+        message = ws.receive(0.1)
+        if message and message.startswith('{'):
             message = json.loads(message)
             gamepad.left_joystick(
                 int(message['lx']*32767), -int(message['ly']*32767))
@@ -133,6 +135,13 @@ def controller(ws):
                 gamepad.release_button(
                     button=vg.XUSB_BUTTON.XUSB_GAMEPAD_GUIDE)
             gamepad.update()
+        elif message and message == 'disconnect':
+            print("Disconnected")
+            gamepad.unregister_notification()
+            del gamepad
+            gamepad = None
+            ws.close()
+            return
 
 
 @app.route('/')

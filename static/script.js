@@ -1,29 +1,7 @@
-var noSleep = new NoSleep();
-
-document.addEventListener('click', function enableNoSleep() {
-    document.removeEventListener('click', enableNoSleep, false);
-    noSleep.enable();
-}, false);
-
 const sections = {
     pending: document.getElementById('Pending'),
     active: document.getElementById('Active'),
 };
-
-let gamepadIndex;
-window.addEventListener('gamepadconnected', (event) => {
-    sections.pending.classList.remove('visible');
-    sections.active.classList.add('visible');
-    noSleep.enable();
-    gamepadIndex = event.gamepad.index;
-});
-
-window.addEventListener('gamepaddisconnected', () => {
-    sections.active.classList.remove('visible');
-    sections.pending.classList.add('visible');
-    noSleep.disable();
-    gamepadIndex = undefined;
-});
 
 const buttons = {
     0: false,
@@ -77,10 +55,57 @@ const buttonElems = {
 
 
 let url = window.location.href.replace("http", "ws");
-let socket = new WebSocket(url + '/controller');
-socket.onopen = function (e) {
-    console.log("[open] Connection established");
-};
+
+let gamepadIndex;
+let socket
+let connectSocket = () => {
+    socket = new WebSocket(url + '/controller');
+    socket.onopen = function (e) {
+        console.log("[open] Connection established");
+    };
+    socket.onmessage = function (event) {
+        console.log(`[message] Data received from server: ${event.data}`);
+        let data = JSON.parse(event.data);
+        console.log(data.lm);
+        console.log(data.sm);
+        // vibrate controller
+        if (gamepadIndex !== undefined) {
+            vibrate(data).then(() => {
+                if (data.lm > 0 || data.sm > 0) {
+                    vibrate(data);
+                }
+            });
+        }
+    };
+
+    socket.onclose = function (event) {
+        connected = false;
+        if (event.wasClean) {
+            console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+        } else {
+            console.log('[close] Connection died');
+        }
+    };
+
+    socket.onerror = function (error) {
+        console.log(`[error] ${error.message}`);
+    };
+}
+
+connectSocket();
+window.addEventListener('gamepadconnected', (event) => {
+    sections.pending.classList.remove('visible');
+    sections.active.classList.add('visible');
+    gamepadIndex = 0;
+});
+
+window.addEventListener('gamepaddisconnected', () => {
+    sections.active.classList.remove('visible');
+    sections.pending.classList.add('visible');
+    gamepadIndex = undefined;
+});
+
+
 
 let vibrate = async (data) => {
     if (navigator.getGamepads()[gamepadIndex].vibrationActuator)
@@ -91,34 +116,6 @@ let vibrate = async (data) => {
             strongMagnitude: data.lm / 255
         });
 }
-
-socket.onmessage = function (event) {
-    console.log(`[message] Data received from server: ${event.data}`);
-    let data = JSON.parse(event.data);
-    console.log(data.lm);
-    console.log(data.sm);
-    // vibrate controller
-    if (gamepadIndex !== undefined) {
-        vibrate(data).then(() => {
-            if (data.lm > 0 || data.sm > 0) {
-                vibrate(data);
-            }
-        });
-    }
-};
-
-socket.onclose = function (event) {
-    connected = false;
-    if (event.wasClean) {
-        console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-    } else {
-        console.log('[close] Connection died');
-    }
-};
-
-socket.onerror = function (error) {
-    console.log(`[error] ${error.message}`);
-};
 
 const updateController = () => {
     for (let buttonIndex = 0; buttonIndex < 19; buttonIndex++) {
@@ -145,23 +142,26 @@ const updateController = () => {
 const update = () => {
     if (gamepadIndex !== undefined) {
         const myGamepad = navigator.getGamepads()[gamepadIndex];
-        buttons["lx"] = myGamepad.axes[0];
-        buttons["ly"] = myGamepad.axes[1];
-        buttons["rx"] = myGamepad.axes[2];
-        buttons["ry"] = myGamepad.axes[3];
+        if (myGamepad) {
+            buttons["lx"] = myGamepad.axes[0];
+            buttons["ly"] = myGamepad.axes[1];
+            buttons["rx"] = myGamepad.axes[2];
+            buttons["ry"] = myGamepad.axes[3];
 
-        myGamepad.buttons.map(e => e.pressed).forEach((isPressed, buttonIndex) => {
-            if (buttonIndex == 6 || buttonIndex == 7) {
-                buttons[buttonIndex] = myGamepad.buttons[buttonIndex].value;
-            }
-            else if (isPressed) {
-                buttons[buttonIndex] = true;
-            } else {
-                buttons[buttonIndex] = false;
-            }
-        })
-        updateController();
-        socket.send(JSON.stringify(buttons));
+            myGamepad.buttons.map(e => e.pressed).forEach((isPressed, buttonIndex) => {
+                if (buttonIndex == 6 || buttonIndex == 7) {
+                    buttons[buttonIndex] = myGamepad.buttons[buttonIndex].value;
+                }
+                else if (isPressed) {
+                    buttons[buttonIndex] = true;
+                } else {
+                    buttons[buttonIndex] = false;
+                }
+            })
+            updateController();
+            if (socket.readyState == 1)
+                socket.send(JSON.stringify(buttons));
+        }
     }
 }
 

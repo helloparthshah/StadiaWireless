@@ -12,7 +12,7 @@ First, you need to install python3 if you don't already have it.
 
 Download the latest release from the [releases](https://github.com/helloparthshah/StadiaWireless/releases/)
 
-You have 2 options, you can directly run the server by downloading the pre installed zip file and running server.exe or you can install StadiaWireless by using the Stadia.Wireless.msi installer.
+Directly run the server by downloading the pre installed zip file and running server.exe
 
 You'll see a icon in the System Tray and right clicking on it will show you the website you'll need to access.
 

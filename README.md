@@ -20,4 +20,6 @@ Open the webpage on your phone, connect your controller and enjoy!
 
 ## FAQ
 
-Download https://vigem.org/Downloads/ is you encounter VIGEM_ERROR_BUS_NOT_FOUND errors
+- I encountered a `VIGEM_ERROR_BUS_NOT_FOUND` error
+Try installing `vgamepad` by executing `pip install vgamepad`
+If that still doesn't work then try installing https://vigem.org/Downloads/

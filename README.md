@@ -17,3 +17,7 @@ Directly run the server by downloading the pre installed zip file and running se
 You'll see a icon in the System Tray and right clicking on it will show you the website you'll need to access.
 
 Open the webpage on your phone, connect your controller and enjoy!
+
+## FAQ
+
+Download https://vigem.org/Downloads/ is you encounter VIGEM_ERROR_BUS_NOT_FOUND errors

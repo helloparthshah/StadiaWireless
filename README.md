@@ -28,3 +28,7 @@ If that still doesn't work then try installing https://vigem.org/Downloads/
 - Website says "No Controller Connected"
 
 Make sure the controller is not connected to the Stadia app
+
+- Linux and macOS versions?
+
+I'm still looking into how to emulate controllers in Linux and macOs. For now, I'm thinking of using uinput for Linux and https://github.com/unbit/foohid for macOs

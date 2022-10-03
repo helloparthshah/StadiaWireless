@@ -16,7 +16,7 @@ Directly run the server by downloading the pre installed zip file and running se
 
 You'll see a icon in the System Tray and right clicking on it will show you the website you'll need to access.
 
-Open the webpage on your phone, connect your controller and enjoy!
+Open the webpage on your phone, connect your controller to your phone through usb and enjoy!
 
 ## FAQ
 
@@ -24,3 +24,7 @@ Open the webpage on your phone, connect your controller and enjoy!
 
 Try installing `vgamepad` by executing `pip install vgamepad`
 If that still doesn't work then try installing https://vigem.org/Downloads/
+
+- Website says "No Controller Connected"
+
+Make sure the controller is not connected to the Stadia app

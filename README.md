@@ -31,4 +31,4 @@ Make sure the controller is not connected to the Stadia app
 
 - Linux and macOS versions?
 
-I'm still looking into how to emulate controllers in Linux and macOs. For now, I'm thinking of using uinput for Linux.
+I'm still looking into how to emulate controllers in Linux and macOs. For now, I'm thinking of using evdev for Linux and foohid for macos.

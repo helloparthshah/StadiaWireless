@@ -17,6 +17,7 @@ Directly run the server by downloading the pre installed zip file and running se
 You'll see a icon in the System Tray and right clicking on it will show you the website you'll need to access.
 
 Open the webpage on your phone, connect your controller to your phone through usb and enjoy!
+*TIP: In order to make it easier to open the webpage, you can open up the webpage in chrome by clicking on the link and sending it to your device or generating a QR code.*
 
 ## FAQ
 

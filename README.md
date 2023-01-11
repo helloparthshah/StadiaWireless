@@ -31,6 +31,14 @@ If that still doesn't work then try installing https://vigem.org/Downloads/
 
 Make sure the controller is not connected to the Stadia app
 
+- I modified the code and want to create a release.
+
+I used pyinstaller to generate the releases. Run the command
+```
+pyinstaller --noconfirm --onedir --windowed --icon "D:/Projects/pythonProjects/StadiaWireless/logo.ico" --add-data "D:/Projects/pythonProjects/StadiaWireless/static;static/" --add-data "D:/Projects/pythonProjects/StadiaWireless/templates;templates/" --add-data "D:/Projects/pythonProjects/StadiaWireless/vgamepad;vgamepad/"  "D:/Projects/pythonProjects/StadiaWireless/server.py"
+```
+and replace the paths with your paths
+
 - Linux and macOS versions?
 
 I'm still looking into how to emulate controllers in Linux and macOs. For now, I'm thinking of using evdev for Linux and foohid for macos.

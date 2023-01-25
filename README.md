@@ -1,10 +1,17 @@
-# Stadia Wireless!
+# Stadia Wireless
+![image](https://j.gifs.com/28oNLW.gif)
 
 Stadia Wireless enables you to use your stadia controller wirelessly. Not just with stadia, but with any game.
 
-## How to use Stadia Wireless
-![image](https://j.gifs.com/28oNLW.gif)
+## Stadia has been shut dowm
 
+![image](https://user-images.githubusercontent.com/35399171/214456250-032f3d2a-7615-449e-a6f4-137a607c4dd0.png)
+
+Stadia was [shut down](https://stadia.google.com/gg/) on January 18, 2023.
+
+Google released a [web tool](https://stadia.google.com/controller) which is available until December 31, 2023 to switch the controller from the normal wifi mode to using Bluetooth LE.
+
+## How to use Stadia Wireless
 [Demo](https://www.youtube.com/watch?v=tBFfNh7ldqo&ab_channel=ParthShah)
 
 First, you need to install python3 if you don't already have it.

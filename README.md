@@ -3,7 +3,7 @@
 
 Stadia Wireless enables you to use your stadia controller wirelessly. Not just with stadia, but with any game.
 
-## Stadia has been shut dowm
+## Stadia has been shut down
 
 ![image](https://user-images.githubusercontent.com/35399171/214456250-032f3d2a-7615-449e-a6f4-137a607c4dd0.png)
 
